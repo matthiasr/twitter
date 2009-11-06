@@ -15,7 +15,7 @@ request = urllib.urlopen(str.format(api_url_initial,screen_name=user,count=tweet
 while request.getcode() == 200:
   response = json.loads(request.read())
   for status in response:
-    print status["created_at"], status["text"]
+    print status["created_at"], status["text"].encode('utf-8')
   statuses.append(response)
   request = urllib.urlopen(str.format(api_url,screen_name=user,count=tweets_per_call,max_id=response[-1]["id"]-1))
 else:
