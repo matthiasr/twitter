@@ -2,6 +2,7 @@
 
 import json
 import urllib
+import sys
 
 user = "plomlompom"
 tweets_per_call = 200
@@ -19,7 +20,7 @@ while request.getcode() == 200:
   statuses.append(response)
   request = urllib.urlopen(str.format(api_url,screen_name=user,count=tweets_per_call,max_id=response[-1]["id"]-1))
 else:
-  printf(stderr, "HTTP Error " + request.getcode() + " on URL " + request.geturl())
+  print >> sys.stderr, "HTTP Error " + str(request.getcode()) + " on URL " + request.geturl()
   exit(1)
 
 f = open(user + ".json")
