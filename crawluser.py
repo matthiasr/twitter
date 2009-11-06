@@ -26,11 +26,11 @@ user = "plomlompom"
 
 all_statuses = []
 for status in statuses(user):
-  print status["created_at"] + "\t" + status["text"].encode("utf-8")
+  print status["created_at"], status["text"].encode("utf-8")
   all_statuses.append(status)
 
 all_statuses = sorted(all_statuses,key=lambda s:s["id"])
 
 f = open(user + ".json","w")
-f.write(json.dumps(statuses))
+f.write(json.dumps(all_statuses))
 f.close()
