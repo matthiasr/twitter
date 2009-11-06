@@ -22,7 +22,11 @@ def statuses(user,cache=None):
     print >> sys.stderr, "HTTP Error " + str(request.getcode()) + " on URL " + request.geturl()
     exit(1)
 
-user = "plomlompom"
+if len(sys.argv) < 2:
+  print "Usage: " + sys.argv[0] + " <username>"
+  exit(0)
+else:
+  user = sys.argv[1]
 
 all_statuses = []
 for status in statuses(user):
