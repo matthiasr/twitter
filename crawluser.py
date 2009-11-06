@@ -22,3 +22,6 @@ else:
   stderr.print("HTTP Error " + request.getcode() + " on URL " + request.geturl())
   exit(1)
 
+f = open(user + ".json")
+f.write(json.dumps(statuses))
+f.close()
