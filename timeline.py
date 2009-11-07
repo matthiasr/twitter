@@ -21,10 +21,11 @@ def statuses(user,cache=None):
     statuses = json.loads(response.read())
   else:
     try:
-      print >> sys.stderr, "HTTP Error " + str(response.getcode()) + " on URL " + response.geturl()
+      if response.getcode() >= 400:
+        print >> sys.stderr, "HTTP Error " + str(response.getcode()) + " on URL " + response.geturl()
+        exit(1)
     except AttributeError:
-      print >> sys.stderr, "HTTP Error on URL " + response.geturl()
-    exit(1)
+      pass        # we don't know whether an actual error happened, so we press on
 
 if len(sys.argv) < 2:
   print "Usage: " + sys.argv[0] + " <username>"
