@@ -9,17 +9,17 @@ def statuses(user,cache=None):
   api_url_initial = "http://twitter.com/statuses/user_timeline.json?screen_name={screen_name}&count={count}"
   api_url = api_url_initial + "&max_id={max_id}"
 
-  request = urllib.urlopen(str.format(api_url_initial,screen_name=user,count=tweets_per_call))
-  while request.getcode() == 200:
-    response = json.loads(request.read())
-    if len(response) == 0:
+  response = urllib.urlopen(str.format(api_url_initial,screen_name=user,count=tweets_per_call))
+  while response.getcode() == 200:
+    statuses = json.loads(response.read())
+    if len(statuses) == 0:
       break
     else:
-      for status in response:
+      for status in statuses:
         yield status
-      request = urllib.urlopen(str.format(api_url,screen_name=user,count=tweets_per_call,max_id=response[-1]["id"]-1))
+      response = urllib.urlopen(str.format(api_url,screen_name=user,count=tweets_per_call,max_id=statuses[-1]["id"]-1))
   else:
-    print >> sys.stderr, "HTTP Error " + str(request.getcode()) + " on URL " + request.geturl()
+    print >> sys.stderr, "HTTP Error " + str(response.getcode()) + " on URL " + response.geturl()
     exit(1)
 
 if len(sys.argv) < 2:
