@@ -18,7 +18,10 @@ def statuses(user,cache=None):
     for status in statuses:
       yield status
     response = urllib.urlopen(api_url % {"screen_name":user, "count":tweets_per_call,"max_id":statuses[-1]["id"]-1})
-    statuses = json.loads(response.read())
+    try:
+      statuses = json.loads(response.read())
+    except ValueError:    # JSON decoding failed
+      statuses = []
   else:
     try:
       if response.getcode() >= 400:
