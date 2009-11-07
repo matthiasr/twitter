@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import json
+import simplejson as json
 import urllib
 import sys
 
