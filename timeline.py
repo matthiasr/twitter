@@ -6,6 +6,18 @@ except ImportError:
   import json
 import urllib
 import sys
+import re
+from datetime import datetime
+
+# 4:53 PM May 19th, 2008
+# Sat Apr 25 09:54:24 +0000 2009
+
+def parsedate(line):
+    try:
+        return datetime.strptime(re.sub(r"(st|nd|rd|th),", ",", line),"%I:%M %p %b %d, %Y")
+    except ValueError:# try:
+        return datetime.strptime(line,"%a %b %d %H:%M:%S +0000 %Y")
+
 
 def statuses(user,cache=None):
   tweets_per_call = 200
@@ -38,7 +50,7 @@ else:
 
 all_statuses = []
 for status in statuses(user):
-  print status["created_at"], status["text"].encode("utf-8")
+  print parsedate(status["created_at"]), status["text"].encode("utf-8")
   all_statuses.append(status)
 
 all_statuses = sorted(all_statuses,key=lambda s:s["id"])
