@@ -5,9 +5,10 @@ try:
 except ImportError:
   import json
 import urllib
-import sys
 import re
 from datetime import datetime
+from mod_python import apache
+from os.path import basename
 
 # 4:53 PM May 19th, 2008
 # Sat Apr 25 09:54:24 +0000 2009
@@ -42,19 +43,11 @@ def statuses(user,cache=None):
     except AttributeError:
       pass        # we don't know whether an actual error happened, so we press on
 
-if len(sys.argv) < 2:
-  print "Usage: " + sys.argv[0] + " <username>"
-  exit(0)
-else:
-  user = sys.argv[1]
-
-all_statuses = []
-for status in statuses(user):
-  print parsedate(status["created_at"]), status["text"].encode("utf-8")
-  all_statuses.append(status)
-
-all_statuses = sorted(all_statuses,key=lambda s:s["id"])
-
-f = open(user + ".json","w")
-f.write(json.dumps(all_statuses))
-f.close()
+def handler(req):
+  req.content_type = "text/plain; charset=UTF8"
+  user = basename(req.filename)
+  if not user:
+    return apache.HTTP_FORBIDDEN
+  for status in statuses(user):
+    req.write( status["text"].encode("utf-8") + "\n")
+  return apache.OK
