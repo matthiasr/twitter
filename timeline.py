@@ -50,7 +50,7 @@ else:
 
 all_statuses = []
 for status in statuses(user):
-  print parsedate(status["created_at"]), status["text"].encode("utf-8")
+  print status["text"].encode("utf-8")
   all_statuses.append(status)
 
 all_statuses = sorted(all_statuses,key=lambda s:s["id"])
