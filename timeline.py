@@ -45,7 +45,10 @@ def statuses(user,cache=None):
 
 def handler(req):
   req.content_type = "text/plain; charset=UTF8"
-  user = basename(req.filename)
+  if req.path_info:
+    user = basename(req.path_info)
+  else:
+    user = basename(req.filename)
   if not user:
     return apache.HTTP_FORBIDDEN
   for status in statuses(user):
